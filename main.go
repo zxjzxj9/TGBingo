@@ -197,11 +197,6 @@ func main() {
 						sendMsg(chatInfo.Message.Chat.ID, fmt.Sprintf("Downloading progress: %.2f", val))
 					}
 					if val == 1.0 {
-						// fmt.Printf("https://api.telegram.org/bot%s/sendDocument?chat_id=%d&document=%s\n",
-						// 	TG_TOKEN, chatInfo.Message.Chat.ID, u.String())
-						// resp, err := http.Get(fmt.Sprintf("https://api.telegram.org/bot%s/sendDocument?chat_id=%d&document=%s",
-						// 	TG_TOKEN, chatInfo.Message.Chat.ID, u.String()))
-
 						// Add client
 						client := &http.Client{}
 						//prepare the reader instances to encode
@@ -216,11 +211,6 @@ func main() {
 						if err != nil {
 							fmt.Println(err)
 						}
-						// respData, err := ioutil.ReadAll(resp.Body)
-						// if err != nil {
-						// 	fmt.Println(err)
-						// }
-						// fmt.Println(string(respData))
 						break
 					}
 				}
@@ -233,12 +223,26 @@ func main() {
 				sendMsg(chatInfo.Message.Chat.ID, fmt.Sprintf("咕的十种家常做法：%s%s咕", spice[idx1], cook[idx2]))
 			}
 		} else if strings.Trim(chatInfo.Message.Text, " \n") == "/cat" {
-			sendMsg(chatInfo.Message.Chat.ID, "喵的十种家常做法：")
-			for i:=0; i<10; i++ {
-				idx1 := rand.Intn(len(spice))
-				idx2 := rand.Intn(len(cook))
-				sendMsg(chatInfo.Message.Chat.ID, fmt.Sprintf("喵的十种家常做法：%s%s喵", spice[idx1], cook[idx2]))
-			}
+			// sendMsg(chatInfo.Message.Chat.ID, "喵的十种家常做法：")
+			// for i:=0; i<10; i++ {
+			// 	idx1 := rand.Intn(len(spice))
+			// 	idx2 := rand.Intn(len(cook))
+			// 	sendMsg(chatInfo.Message.Chat.ID, fmt.Sprintf("喵的十种家常做法：%s%s喵", spice[idx1], cook[idx2]))
+			// }
+			go func() {
+				url, err := randImage("cat")
+				if err != nil {
+					return
+				}
+				resp, err := http.Get(fmt.Sprintf("https://api.telegram.org/bot%s/sendDocument?chat_id=%d&document=%s",
+					TG_TOKEN, chatInfo.Message.Chat.ID, url))
+				if err != nil {
+					data, err := ioutil.ReadAll(resp.Body)
+					fmt.Println(data)
+					fmt.Println(err)
+					return
+				}
+			}()
 		} else if strings.Trim(chatInfo.Message.Text, " \n") == "/bingo" {
 			text = "Let's play a bingo game! Please input the 4 digit (no repeat) number..."
 
