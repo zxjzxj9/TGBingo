@@ -4,11 +4,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"io"
 	"io/ioutil"
 	"math/rand"
 	"net/http"
 	"net/url"
 	"os"
+	"path"
 	"strconv"
 	"strings"
 	"time"
@@ -16,6 +18,7 @@ import (
 
 var (
 	TG_TOKEN string
+	SERVER string
 )
 
 type ChatInfo struct {
@@ -110,6 +113,7 @@ func main() {
 	rand.Seed(time.Now().UnixNano())
 	chars := []rune("0123456789")
 
+	// Read telegram token from file
 	fmt.Println("Read TG token...")
 	f, err := os.Open("TG_TOKEN")
 	if err != nil {
@@ -122,7 +126,24 @@ func main() {
 		return
 	}
 	TG_TOKEN = strings.Trim(string(s), " \n")
+	f.Close()
 	fmt.Printf("Read token success, token value: %s\n", TG_TOKEN)
+
+	// Read telegram url from file
+	fmt.Println("Read server addr...")
+	f, err = os.Open("SERVER")
+	if err != nil {
+		fmt.Println("Fail to read server")
+		return
+	}
+	s, err = ioutil.ReadAll(f)
+	if err != nil {
+		fmt.Println("Read server file failure")
+		return
+	}
+	SERVER = strings.Trim(string(s), " \n")
+	f.Close()
+	fmt.Printf("Read server success, token value: %s\n", SERVER)
 
 	r := gin.Default()
 	r.GET("/ping", func(c *gin.Context) {
@@ -130,6 +151,7 @@ func main() {
 			"message": "pong",
 		})
 	})
+	r.Static("/cache", "./cache")
 
 	BinggoNumber := make(map[int]string)
 	players := make(map[string]int)
@@ -147,9 +169,77 @@ func main() {
 		json.Unmarshal(jsonData, &chatInfo)
 		fmt.Println(chatInfo)
 
+		spice := strings.Split("肉桂 丁香 茴香 陈皮 草果 豆蔻 鼠尾 香叶 甘草 百里香 孜然 香茅草 迷迭香", " ")
+		cook := strings.Split("煎 炒 烹 炸 煮 熬 炖 溜 烧 汆 烤", " ")
+
 		var text string
 
-		if strings.Trim(chatInfo.Message.Text, " \n") == "/bingo" {
+		if strings.HasPrefix(strings.Trim(chatInfo.Message.Text, " \n"), "/book") {
+			bookId, err := strconv.Atoi(strings.Split(strings.Trim(chatInfo.Message.Text, " \n"), " ")[1])
+			if err != nil {
+				sendMsg(chatInfo.Message.Chat.ID, fmt.Sprintf("Invalid bookId: %d", bookId))
+				sendMsg(chatInfo.Message.Chat.ID, err.Error())
+			}
+			c := make(chan float32)
+			go crawl(bookId, c)
+			go func(c <- chan float32) {
+				sendMsg(chatInfo.Message.Chat.ID, "Generating book link...")
+				u, err := url.Parse(SERVER)
+				if err != nil {
+					fmt.Println("url parse error...")
+				}
+				bookPath := fmt.Sprintf("cache/%d.txt", bookId)
+				u.Path = path.Join(u.Path, bookPath)
+
+				for {
+					val := <-c
+					if int(val*10000) % 500 == 0 {
+						sendMsg(chatInfo.Message.Chat.ID, fmt.Sprintf("Downloading progress: %.2f", val))
+					}
+					if val == 1.0 {
+						// fmt.Printf("https://api.telegram.org/bot%s/sendDocument?chat_id=%d&document=%s\n",
+						// 	TG_TOKEN, chatInfo.Message.Chat.ID, u.String())
+						// resp, err := http.Get(fmt.Sprintf("https://api.telegram.org/bot%s/sendDocument?chat_id=%d&document=%s",
+						// 	TG_TOKEN, chatInfo.Message.Chat.ID, u.String()))
+
+						// Add client
+						client := &http.Client{}
+						//prepare the reader instances to encode
+						fout, err := os.Open(bookPath)
+						values := map[string]io.Reader{
+							"document":  fout, // lets assume its this file
+							"chat_id": strings.NewReader(strconv.Itoa(chatInfo.Message.Chat.ID)),
+						}
+
+						err = upload(client, fmt.Sprintf("https://api.telegram.org/bot%s/sendDocument", TG_TOKEN), values)
+
+						if err != nil {
+							fmt.Println(err)
+						}
+						// respData, err := ioutil.ReadAll(resp.Body)
+						// if err != nil {
+						// 	fmt.Println(err)
+						// }
+						// fmt.Println(string(respData))
+						break
+					}
+				}
+			}(c)
+		} else if strings.Trim(chatInfo.Message.Text, " \n") == "/pigeon" {
+			sendMsg(chatInfo.Message.Chat.ID, "咕的十种家常做法：")
+			for i:=0; i<10; i++ {
+				idx1 := rand.Intn(len(spice))
+				idx2 := rand.Intn(len(cook))
+				sendMsg(chatInfo.Message.Chat.ID, fmt.Sprintf("咕的十种家常做法：%s%s咕", spice[idx1], cook[idx2]))
+			}
+		} else if strings.Trim(chatInfo.Message.Text, " \n") == "/cat" {
+			sendMsg(chatInfo.Message.Chat.ID, "喵的十种家常做法：")
+			for i:=0; i<10; i++ {
+				idx1 := rand.Intn(len(spice))
+				idx2 := rand.Intn(len(cook))
+				sendMsg(chatInfo.Message.Chat.ID, fmt.Sprintf("喵的十种家常做法：%s%s喵", spice[idx1], cook[idx2]))
+			}
+		} else if strings.Trim(chatInfo.Message.Text, " \n") == "/bingo" {
 			text = "Let's play a bingo game! Please input the 4 digit (no repeat) number..."
 
 			length := 4
@@ -237,7 +327,6 @@ func main() {
 			}
 
 		}
-
 
 	})
 
