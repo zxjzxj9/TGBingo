@@ -227,7 +227,41 @@ func main() {
 
 		var text string
 
-		if strings.HasPrefix(strings.Trim(chatInfo.Message.Text, " \n"), "/book") {
+		if strings.HasPrefix(strings.Trim(chatInfo.Message.Text, " \n"), "/help") {
+			sendMsg(chatInfo.Message.Chat.ID, `
+Help:
+############
+	NekoRoid is a bot having a lot of fun, enjoy!
+############
+    /dice -- cast a dice
+    /dart -- cast a dart
+    /bingo -- play a bingo game
+    /book {bookid} -- download a book
+############
+`)
+		} else if strings.HasPrefix(strings.Trim(chatInfo.Message.Text, " \n"), "/dice") {
+			resp, err := http.Get(fmt.Sprintf("https://api.telegram.org/bot%s/sendDice?chat_id=%d&emoji=%s",
+				TG_TOKEN, chatInfo.Message.Chat.ID, "🎲"))
+			if err != nil {
+				fmt.Println(err)
+			}
+			respData, err := ioutil.ReadAll(resp.Body)
+			if err != nil {
+				fmt.Println(err)
+			}
+			fmt.Println(string(respData))
+		} else if strings.HasPrefix(strings.Trim(chatInfo.Message.Text, " \n"), "/dart") {
+			resp, err := http.Get(fmt.Sprintf("https://api.telegram.org/bot%s/sendDice?chat_id=%d&emoji=%s",
+				TG_TOKEN, chatInfo.Message.Chat.ID, "🎯"))
+			if err != nil {
+				fmt.Println(err)
+			}
+			respData, err := ioutil.ReadAll(resp.Body)
+			if err != nil {
+				fmt.Println(err)
+			}
+			fmt.Println(string(respData))
+		} else if strings.HasPrefix(strings.Trim(chatInfo.Message.Text, " \n"), "/book") {
 			bookId, err := strconv.Atoi(strings.Split(strings.Trim(chatInfo.Message.Text, " \n"), " ")[1])
 			if err != nil {
 				sendMsg(chatInfo.Message.Chat.ID, fmt.Sprintf("Invalid bookId: %d", bookId))
