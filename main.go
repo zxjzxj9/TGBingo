@@ -18,7 +18,7 @@ import (
 
 var (
 	TG_TOKEN string
-	SERVER string
+	SERVER   string
 )
 
 type ChatInfo struct {
@@ -45,6 +45,17 @@ type ChatInfo struct {
 	} `json:"message"`
 }
 
+type WebHookInfo struct {
+	Ok     bool `json:"ok"`
+	Result struct {
+		URL                  string `json:"url"`
+		HasCustomCertificate bool   `json:"has_custom_certificate"`
+		PendingUpdateCount   int    `json:"pending_update_count"`
+		MaxConnections       int    `json:"max_connections"`
+		IPAddress            string `json:"ip_address"`
+	} `json:"result"`
+}
+
 func sendMsg(chatId int, text string) {
 	// resp
 	resp, err := http.Get(fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage?chat_id=%d&text=%s",
@@ -63,8 +74,8 @@ func isBingo(predict string, target string) (string, bool, bool) {
 	var text string
 	win := false
 	isValid := true
-	for i:=0; i<4; i++ {
-		for j:=i+1; j<4; j++ {
+	for i := 0; i < 4; i++ {
+		for j := i + 1; j < 4; j++ {
 			if predict[i] == predict[j] {
 				isValid = false
 			}
@@ -83,14 +94,14 @@ func isBingo(predict string, target string) (string, bool, bool) {
 		reta := 0
 		retb := 0
 
-		for i:= 0; i< 4; i++ {
+		for i := 0; i < 4; i++ {
 			if target[i] == predict[i] {
 				reta++
 			}
 		}
 
-		for i:=0; i<4; i++ {
-			for j:=0; j<4; j++ {
+		for i := 0; i < 4; i++ {
+			for j := 0; j < 4; j++ {
 				if target[i] == predict[j] {
 					retb++
 				}
@@ -145,6 +156,48 @@ func main() {
 	f.Close()
 	fmt.Printf("Read server success, token value: %s\n", SERVER)
 
+	fmt.Println("Remove all previous webhooks...")
+	resp, err := http.Get(fmt.Sprintf("https://api.telegram.org/bot%s/getWebhookInfo", TG_TOKEN))
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	respData, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(string(respData))
+
+	webHookInfo := WebHookInfo{}
+	json.Unmarshal(respData, &webHookInfo)
+	fmt.Printf("Current webhook info: %v", webHookInfo)
+	resp, err = http.Get(fmt.Sprintf("https://api.telegram.org/bot%s/deleteWebhook?url=%s",
+		TG_TOKEN, webHookInfo.Result.URL))
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	respData, err = ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(string(respData))
+	fmt.Println("Remove success, adding new webhook...")
+	resp, err = http.Get(fmt.Sprintf("https://api.telegram.org/bot%s/setWebhook?url=%s",
+		TG_TOKEN, SERVER))
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	respData, err = ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println("Register new webhook success...")
+
 	r := gin.Default()
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
@@ -182,7 +235,7 @@ func main() {
 			}
 			c := make(chan float32)
 			go crawl(bookId, c)
-			go func(c <- chan float32) {
+			go func(c <-chan float32) {
 				sendMsg(chatInfo.Message.Chat.ID, "Generating book link...")
 				u, err := url.Parse(SERVER)
 				if err != nil {
@@ -193,7 +246,7 @@ func main() {
 
 				for {
 					val := <-c
-					if int(val*10000) % 500 == 0 {
+					if int(val*10000)%500 == 0 {
 						sendMsg(chatInfo.Message.Chat.ID, fmt.Sprintf("Downloading progress: %.2f", val))
 					}
 					if val == 1.0 {
@@ -202,8 +255,8 @@ func main() {
 						//prepare the reader instances to encode
 						fout, err := os.Open(bookPath)
 						values := map[string]io.Reader{
-							"document":  fout, // lets assume its this file
-							"chat_id": strings.NewReader(strconv.Itoa(chatInfo.Message.Chat.ID)),
+							"document": fout, // lets assume its this file
+							"chat_id":  strings.NewReader(strconv.Itoa(chatInfo.Message.Chat.ID)),
 						}
 
 						err = upload(client, fmt.Sprintf("https://api.telegram.org/bot%s/sendDocument", TG_TOKEN), values)
@@ -217,7 +270,7 @@ func main() {
 			}(c)
 		} else if strings.Trim(chatInfo.Message.Text, " \n") == "/pigeon" {
 			sendMsg(chatInfo.Message.Chat.ID, "咕的十种家常做法：")
-			for i:=0; i<10; i++ {
+			for i := 0; i < 10; i++ {
 				idx1 := rand.Intn(len(spice))
 				idx2 := rand.Intn(len(cook))
 				sendMsg(chatInfo.Message.Chat.ID, fmt.Sprintf("咕的十种家常做法：%s%s咕", spice[idx1], cook[idx2]))
@@ -296,7 +349,7 @@ func main() {
 			predict := strings.Trim(chatInfo.Message.Text, " \n")
 
 			if twoPlayers && chatInfo.Message.Chat.ID != turn {
-				sendMsg( chatInfo.Message.Chat.ID, "Please wait for your turn...")
+				sendMsg(chatInfo.Message.Chat.ID, "Please wait for your turn...")
 			} else if twoPlayers {
 				text, isValid, win := isBingo(predict, target)
 				if !isValid {
