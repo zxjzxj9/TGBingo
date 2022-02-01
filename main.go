@@ -343,7 +343,7 @@ Help:
 				// filePath := utils.TrimInvalidFilePathChars(songInfo)
 				// mp3FilePath := filePath + ".mp3"
 				sendFile(mp3FilePath, chatInfo.Message.Chat.ID, songInfo)
-				sendMsg(chatInfo.Message.Chat.ID, mp3FilePath)
+				// sendMsg(chatInfo.Message.Chat.ID, mp3FilePath)
 				if err != nil {
 					sendMsg(chatInfo.Message.Chat.ID, "Error: "+err.Error())
 					return
