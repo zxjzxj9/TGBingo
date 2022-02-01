@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/winterssy/mxget/pkg/provider"
+	"golang.org/x/net/context"
 	"io"
 	"io/ioutil"
 	"math/rand"
@@ -70,6 +72,34 @@ func sendMsg(chatId int, text string) {
 	fmt.Println(string(respData))
 }
 
+func sendMarkdown(chatId int, text string) {
+	// resp
+	resp, err := http.Get(fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage?chat_id=%d&text=%s&parse_mode=MarkdownV2",
+		TG_TOKEN, chatId, url.QueryEscape(text)))
+	if err != nil {
+		fmt.Println(err)
+	}
+	respData, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(string(respData))
+}
+
+func sendHTML(chatId int, text string) {
+	// resp
+	resp, err := http.Get(fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage?chat_id=%d&text=%s&parse_mode=HTML",
+		TG_TOKEN, chatId, url.QueryEscape(text)))
+	if err != nil {
+		fmt.Println(err)
+	}
+	respData, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(string(respData))
+}
+
 func isBingo(predict string, target string) (string, bool, bool) {
 	var text string
 	win := false
@@ -116,6 +146,31 @@ func isBingo(predict string, target string) (string, bool, bool) {
 		}
 	}
 	return text, isValid, win
+}
+
+func sendFile(filePath string, chatId int, caption string) error {
+	// Add client
+	client := &http.Client{}
+	//prepare the reader instances to encode
+	fout, err := os.Open(filePath)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+
+	values := map[string]io.Reader{
+		"document": fout, // lets assume its this file
+		"chat_id":  strings.NewReader(strconv.Itoa(chatId)),
+		"caption":  strings.NewReader(caption),
+	}
+
+	err = upload(client, fmt.Sprintf("https://api.telegram.org/bot%s/sendDocument", TG_TOKEN), values)
+
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+	return nil
 }
 
 func main() {
@@ -228,17 +283,73 @@ func main() {
 		var text string
 
 		if strings.HasPrefix(strings.Trim(chatInfo.Message.Text, " \n"), "/help") {
-			sendMsg(chatInfo.Message.Chat.ID, `
+			sendHTML(chatInfo.Message.Chat.ID, `
 Help:
-############
-	NekoRoid is a bot having a lot of fun, enjoy!
-############
+####################
+	NekoRoid is a bot having a lot of fun
+<code>
+ #    # ###### #    #  ####  
+ ##   # #      #   #  #    # 
+ # #  # #####  ####   #    # 
+ #  # # #      #  #   #    # 
+ #   ## #      #   #  #    # 
+ #    # ###### #    #  ####
+</code>
+####################
     /dice -- cast a dice
     /dart -- cast a dart
     /bingo -- play a bingo game
     /book {bookid} -- download a book
-############
+####################
 `)
+		} else if strings.HasPrefix(strings.Trim(chatInfo.Message.Text, " \n"), "/search_song") {
+			platform := "kg"
+			client, err := provider.GetClient(platform)
+			if err != nil {
+				sendMsg(chatInfo.Message.Chat.ID, err.Error())
+				return
+			}
+			keyword := strings.Trim(strings.Replace(chatInfo.Message.Text, "/search_song", "", -1), " \n")
+			result, err := client.SearchSongs(context.Background(), keyword)
+			var sb strings.Builder
+			for i, s := range result {
+				fmt.Fprintf(&sb, "[%02d] %s - %s - /download_song%s\n", i+1, s.Name, s.Artist, s.Id)
+			}
+			sendMsg(chatInfo.Message.Chat.ID, sb.String())
+		} else if strings.HasPrefix(strings.Trim(chatInfo.Message.Text, " \n"), "/download_song") {
+			platform := "kg"
+			client, err := provider.GetClient(platform)
+			if err != nil {
+				sendMsg(chatInfo.Message.Chat.ID, err.Error())
+				return
+			}
+			songId := strings.Trim(strings.Replace(chatInfo.Message.Text, "/download_song", "", -1), " \n")
+			ctx := context.Background()
+			song, err := client.GetSong(ctx, songId)
+			if err != nil {
+				sendMsg(chatInfo.Message.Chat.ID, err.Error())
+				return
+			}
+
+			sendMsg(chatInfo.Message.Chat.ID, "Start downloading music...")
+			go func() {
+				mp3FilePath, err := ConcurrentDownload(ctx, client, "./cache", song)
+				if err != nil {
+					sendMsg(chatInfo.Message.Chat.ID, "Error: "+err.Error())
+					return
+				}
+				songInfo := fmt.Sprintf("%s - %s", song.Artist, song.Name)
+				// filePath := filepath.Join("./cache", utils.TrimInvalidFilePathChars(songInfo))
+				// filePath := utils.TrimInvalidFilePathChars(songInfo)
+				// mp3FilePath := filePath + ".mp3"
+				sendFile(mp3FilePath, chatInfo.Message.Chat.ID, songInfo)
+				sendMsg(chatInfo.Message.Chat.ID, mp3FilePath)
+				if err != nil {
+					sendMsg(chatInfo.Message.Chat.ID, "Error: "+err.Error())
+					return
+				}
+			}()
+
 		} else if strings.HasPrefix(strings.Trim(chatInfo.Message.Text, " \n"), "/dice") {
 			resp, err := http.Get(fmt.Sprintf("https://api.telegram.org/bot%s/sendDice?chat_id=%d&emoji=%s",
 				TG_TOKEN, chatInfo.Message.Chat.ID, "🎲"))
