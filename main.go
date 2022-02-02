@@ -300,6 +300,7 @@ Help:
     /dart -- cast a dart
     /bingo -- play a bingo game
     /book {bookid} -- download a book
+	/search_song {song info} -- search a song and generate download link
 ####################
 `)
 		} else if strings.HasPrefix(strings.Trim(chatInfo.Message.Text, " \n"), "/search_song") {
@@ -333,6 +334,7 @@ Help:
 
 			sendMsg(chatInfo.Message.Chat.ID, "Start downloading music...")
 			go func() {
+				ctx := context.Background()
 				mp3FilePath, err := ConcurrentDownload(ctx, client, "./cache", song)
 				if err != nil {
 					sendMsg(chatInfo.Message.Chat.ID, "Error: "+err.Error())
