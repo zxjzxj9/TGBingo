@@ -49,7 +49,7 @@ func nDm(n int, m int) int {
 func createPlayer(chatId int, name string) {
 	db, err := gorm.Open(sqlite.Open("game.db"), &gorm.Config{})
 	if err != nil {
-		fmt.Println("Open database error: %v", err)
+		fmt.Printf("Open database error: %v\n", err)
 	}
 
 	db.AutoMigrate(&Player{})
