@@ -91,4 +91,6 @@ func createPlayer(chatId int, name string) {
 		player.Build = 0
 	}
 
+	result := db.Create(&player)
+	fmt.Printf("%v \n", result)
 }
