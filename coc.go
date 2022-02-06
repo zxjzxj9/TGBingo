@@ -47,6 +47,28 @@ func nDm(n int, m int) int {
 	return ret
 }
 
+func enhance(val int) int {
+	ret := val
+	if nDm(1, 100) > val {
+		ret += nDm(1, 10)
+	}
+	if ret >= 99 {
+		return 99
+	}
+	return ret
+}
+
+func reduce(rval int, vals ...*int) {
+	sz := len(vals)
+	frac := make([]float64, sz)
+	sum := 0.0
+	for i := 0; i < sz; i++ {
+		frac[i] = rand.Float64()
+		sum += frac[i]
+	}
+
+}
+
 func createPlayer(chatId int, name string) *Player {
 	db, err := gorm.Open(sqlite.Open("game.db"), &gorm.Config{})
 	if err != nil {
@@ -71,23 +93,42 @@ func createPlayer(chatId int, name string) *Player {
 	player.Luck = nDm(3, 6) * 5
 	player.MP = player.Power / 5
 
+	player.Age = rand.Intn(75) + 15
+
+	switch {
+	case player.Age >= 15 && player.Age <= 19:
+		player.Strength -= 5
+		player.Size -= 5
+		player.Education -= 5
+		t := nDm(3, 6) * 5
+		if t >= player.Luck {
+			player.Luck = t
+		}
+	case player.Age >= 20 && player.Age <= 39:
+		player.Education = enhance(player.Education)
+	case player.Age >= 40 && player.Age <= 49:
+		player.Education = enhance(player.Education)
+		player.Education = enhance(player.Education)
+	}
+
 	s := player.Strength + player.Size
-	if s >= 2 && s <= 64 {
+	switch {
+	case s >= 2 && s <= 64:
 		player.DamageBonus = -2
 		player.Build = -2
-	} else if s >= 65 && s <= 84 {
+	case s >= 65 && s <= 84:
 		player.DamageBonus = -1
 		player.Build = -1
-	} else if s >= 85 && s <= 124 {
+	case s >= 85 && s <= 124:
 		player.DamageBonus = 0
 		player.Build = 0
-	} else if s >= 125 && s <= 164 {
+	case s >= 125 && s <= 164:
 		player.DamageBonus = nDm(1, 4)
 		player.Build = 1
-	} else if s >= 165 && s <= 204 {
+	case s >= 165 && s <= 204:
 		player.DamageBonus = nDm(1, 6)
 		player.Build = 2
-	} else {
+	default:
 		player.DamageBonus = 0
 		player.Build = 0
 	}
