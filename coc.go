@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 	"math/rand"
 )
 
@@ -12,7 +13,7 @@ func init() {
 }
 
 type Player struct {
-	ChatId int
+	ChatId int `gorm:"primaryKey"`
 	Name   string
 
 	// Primary
@@ -91,6 +92,11 @@ func createPlayer(chatId int, name string) {
 		player.Build = 0
 	}
 
-	result := db.Create(&player)
-	fmt.Printf("%v \n", result)
+	// result := db.Create(&player)
+	// result := db.Model(&player).Updates(player)
+	// result := db.Save(&player)
+	result := db.Clauses(clause.OnConflict{
+		UpdateAll: true,
+	}).Create(&player)
+	fmt.Printf("%v \n", result.Error)
 }
