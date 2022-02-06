@@ -47,7 +47,7 @@ func nDm(n int, m int) int {
 	return ret
 }
 
-func createPlayer(chatId int, name string) {
+func createPlayer(chatId int, name string) *Player {
 	db, err := gorm.Open(sqlite.Open("game.db"), &gorm.Config{})
 	if err != nil {
 		fmt.Printf("Open database error: %v\n", err)
@@ -99,4 +99,8 @@ func createPlayer(chatId int, name string) {
 		UpdateAll: true,
 	}).Create(&player)
 	fmt.Printf("%v \n", result.Error)
+	if result.Error != nil {
+		return nil
+	}
+	return &player
 }
