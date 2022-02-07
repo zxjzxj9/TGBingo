@@ -5,6 +5,7 @@ import (
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
+	"math"
 	"math/rand"
 )
 
@@ -66,7 +67,12 @@ func reduce(rval int, vals ...*int) {
 		frac[i] = rand.Float64()
 		sum += frac[i]
 	}
-
+	for i := 0; i < sz-1; i++ {
+		frac[i] = math.Round(frac[i] * float64(rval) / sum)
+		rval -= int(frac[i])
+		*vals[i] = int(frac[i])
+	}
+	*vals[sz-1] = rval
 }
 
 func createPlayer(chatId int, name string) *Player {
