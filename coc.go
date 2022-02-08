@@ -115,6 +115,35 @@ func createPlayer(chatId int, name string) *Player {
 	case player.Age >= 40 && player.Age <= 49:
 		player.Education = enhance(player.Education)
 		player.Education = enhance(player.Education)
+		reduce(5, &player.Strength, &player.Constitution, &player.Dexterity)
+		reduce(5, &player.Appearance)
+	case player.Age >= 50 && player.Age <= 59:
+		player.Education = enhance(player.Education)
+		player.Education = enhance(player.Education)
+		player.Education = enhance(player.Education)
+		reduce(10, &player.Strength, &player.Constitution, &player.Dexterity)
+		reduce(10, &player.Appearance)
+	case player.Age >= 60 && player.Age <= 69:
+		player.Education = enhance(player.Education)
+		player.Education = enhance(player.Education)
+		player.Education = enhance(player.Education)
+		player.Education = enhance(player.Education)
+		reduce(20, &player.Strength, &player.Constitution, &player.Dexterity)
+		reduce(15, &player.Appearance)
+	case player.Age >= 70 && player.Age <= 79:
+		player.Education = enhance(player.Education)
+		player.Education = enhance(player.Education)
+		player.Education = enhance(player.Education)
+		player.Education = enhance(player.Education)
+		reduce(40, &player.Strength, &player.Constitution, &player.Dexterity)
+		reduce(20, &player.Appearance)
+	case player.Age >= 80 && player.Age <= 89:
+		player.Education = enhance(player.Education)
+		player.Education = enhance(player.Education)
+		player.Education = enhance(player.Education)
+		player.Education = enhance(player.Education)
+		reduce(80, &player.Strength, &player.Constitution, &player.Dexterity)
+		reduce(25, &player.Appearance)
 	}
 
 	s := player.Strength + player.Size
