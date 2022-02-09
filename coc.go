@@ -163,10 +163,24 @@ func createPlayer(chatId int, name string) *Player {
 	case s >= 165 && s <= 204:
 		player.DamageBonus = nDm(1, 6)
 		player.Build = 2
+	case s >= 205 && s <= 284:
+		player.DamageBonus = nDm(2, 6)
+		player.Build = 3
+	case s >= 285 && s <= 364:
+		player.DamageBonus = nDm(3, 6)
+		player.Build = 4
+	case s >= 365 && s <= 444:
+		player.DamageBonus = nDm(4, 6)
+		player.Build = 5
+	case s >= 445 && s <= 524:
+		player.DamageBonus = nDm(5, 6)
+		player.Build = 6
 	default:
 		player.DamageBonus = 0
 		player.Build = 0
 	}
+
+	player.HP = (player.Constitution + player.Size) / 10
 
 	// result := db.Create(&player)
 	// result := db.Model(&player).Updates(player)
