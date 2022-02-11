@@ -40,6 +40,10 @@ type Player struct {
 	Age int
 }
 
+type Occupation struct {
+	Id int
+}
+
 // cat n m-facet dice and return result
 func nDm(n int, m int) int {
 	ret := 0
@@ -208,4 +212,12 @@ func createPlayer(chatId int, name string) *Player {
 		return nil
 	}
 	return &player
+}
+
+func createOccupation(id int) {
+	switch id {
+	case 0:
+		// ANTIQUARIAN
+
+	}
 }
