@@ -33,15 +33,17 @@ type Player struct {
 	DamageBonus int
 	Build       int
 
-	MOV int
-	SP  int // skill points
-	HP  int // health points
-	SAN int // sanity
-	Age int
+	MOV    int
+	SP     int // skill points
+	HP     int // health points
+	SAN    int // sanity
+	Age    int
+	Credit int
 }
 
 type Occupation struct {
-	Id int
+	Id    int
+	Skill string
 }
 
 // cat n m-facet dice and return result
