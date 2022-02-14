@@ -7,6 +7,10 @@ import (
 
 func getFeed(url string) {
 	fp := gofeed.NewParser()
-	feed, _ := fp.ParseURL("http://feeds.twit.tv/twit.xml")
+	feed, _ := fp.ParseURL("http://www3.nhk.or.jp/rss/news/cat0.xml")
 	fmt.Println(feed.Title)
+	fmt.Println(feed.Links)
+	for _, item := range feed.Items {
+		fmt.Println(item.Title)
+	}
 }
