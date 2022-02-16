@@ -305,7 +305,9 @@ Help:
 ####################
 `)
 		} else if strings.HasPrefix(strings.Trim(chatInfo.Message.Text, " \n"), "/nhknews") {
-			sendMsg(chatInfo.Message.Chat.ID, getFeed("http://www3.nhk.or.jp/rss/news/cat0.xml"))
+			for _, rss := range getFeed("http://www3.nhk.or.jp/rss/news/cat0.xml") {
+				sendMsg(chatInfo.Message.Chat.ID, rss)
+			}
 		} else if strings.HasPrefix(strings.Trim(chatInfo.Message.Text, " \n"), "/search_song") {
 			platform := "kg"
 			client, err := provider.GetClient(platform)
