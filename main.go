@@ -299,10 +299,13 @@ Help:
     /dice -- cast a dice
     /dart -- cast a dart
     /bingo -- play a bingo game
+    /nhknews -- get nhk news from rss
     /book {bookid} -- download a book
 	/search_song {song info} -- search a song and generate download link
 ####################
 `)
+		} else if strings.HasPrefix(strings.Trim(chatInfo.Message.Text, " \n"), "/nhknews") {
+			sendMsg(chatInfo.Message.Chat.ID, getFeed("http://www3.nhk.or.jp/rss/news/cat0.xml"))
 		} else if strings.HasPrefix(strings.Trim(chatInfo.Message.Text, " \n"), "/search_song") {
 			platform := "kg"
 			client, err := provider.GetClient(platform)
