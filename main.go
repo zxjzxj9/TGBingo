@@ -300,12 +300,17 @@ Help:
     /dart -- cast a dart
     /bingo -- play a bingo game
     /nhknews -- get nhk news from rss
+    /investing -- get investing news from rss
     /book {bookid} -- download a book
 	/search_song {song info} -- search a song and generate download link
 ####################
 `)
 		} else if strings.HasPrefix(strings.Trim(chatInfo.Message.Text, " \n"), "/nhknews") {
 			for _, rss := range getFeed("http://www3.nhk.or.jp/rss/news/cat0.xml") {
+				sendMsg(chatInfo.Message.Chat.ID, rss)
+			}
+		} else if strings.HasPrefix(strings.Trim(chatInfo.Message.Text, " \n"), "/investing") {
+			for _, rss := range getFeed("https://www.investing.com/rss/news.rss") {
 				sendMsg(chatInfo.Message.Chat.ID, rss)
 			}
 		} else if strings.HasPrefix(strings.Trim(chatInfo.Message.Text, " \n"), "/search_song") {
