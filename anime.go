@@ -7,9 +7,9 @@ import (
 	"io"
 )
 
-func animeGAN(r io.Reader) []byte {
+func animeGAN(reader io.Reader) []byte {
 	//encode jpeg to arryy
-	img, _, err := image.Decode(r)
+	img, _, err := image.Decode(reader)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
