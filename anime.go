@@ -30,5 +30,10 @@ func animeGAN(reader io.Reader) []byte {
 		}
 	}
 
+	_, ok := imgT.Data().([][][][]float32)
+	if !ok {
+		fmt.Println("Error conversion image data")
+	}
+
 	return nil
 }
