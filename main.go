@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/winterssy/mxget/pkg/provider"
+	"go.eqrx.net/mauzr/pkg/bme/bme680"
 	"golang.org/x/net/context"
 	"io"
 	"io/ioutil"
@@ -266,6 +267,8 @@ func main() {
 	twoPlayers := false
 	var turn int
 
+	sensor := bme680.New("/dev/i2c-1", 0x77)
+
 	r.POST("/bingo", func(c *gin.Context) {
 		var chatInfo ChatInfo
 		jsonData, err := ioutil.ReadAll(c.Request.Body)
@@ -312,6 +315,15 @@ Help:
 		} else if strings.HasPrefix(strings.Trim(chatInfo.Message.Text, " \n"), "/investing") {
 			for _, rss := range getFeed("https://www.investing.com/rss/news.rss") {
 				sendMsg(chatInfo.Message.Chat.ID, rss)
+			}
+		} else if strings.HasPrefix(strings.Trim(chatInfo.Message.Text, " \n"), "/sensor") {
+			measure, err := sensor.Measure()
+			if err != nil {
+				sendMsg(chatInfo.Message.Chat.ID, err.Error())
+			} else {
+				sendMsg(chatInfo.Message.Chat.ID, fmt.Sprintf(
+					"Pressure: %6.3f, Temperature: %4.2f, Humidity: %4.2f, Gas: %6.3f",
+					measure.Pressure, measure.Temperature, measure.Humidity, measure.GasResistance))
 			}
 		} else if strings.HasPrefix(strings.Trim(chatInfo.Message.Text, " \n"), "/search_song") {
 			platform := "kg"

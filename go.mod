@@ -15,6 +15,7 @@ require (
 	github.com/winterssy/ghttp v0.0.0-20200904031839-b68c76d629d9
 	github.com/winterssy/glog v0.0.0-20200305052031-8e145d5ae4ef
 	github.com/winterssy/mxget v0.0.0-20200904042619-69f4c144fa26
+	go.eqrx.net/mauzr v0.0.0-20200908184101-9491308f9412 // indirect
 	go4.org/unsafe/assume-no-moving-gc v0.0.0-20211027215541-db492cf91b37 // indirect
 	golang.org/x/net v0.0.0-20210614182718-04defd469f4e
 	gorgonia.org/tensor v0.9.21
