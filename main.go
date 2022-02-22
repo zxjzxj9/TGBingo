@@ -305,6 +305,7 @@ Help:
     /nhknews -- get nhk news from rss
     /investing -- get investing news from rss
     /book {bookid} -- download a book
+	/sensor -- current room status
 	/search_song {song info} -- search a song and generate download link
 ####################
 `)
@@ -317,6 +318,7 @@ Help:
 				sendMsg(chatInfo.Message.Chat.ID, rss)
 			}
 		} else if strings.HasPrefix(strings.Trim(chatInfo.Message.Text, " \n"), "/sensor") {
+			sensor.Reset()
 			measure, err := sensor.Measure()
 			if err != nil {
 				sendMsg(chatInfo.Message.Chat.ID, err.Error())

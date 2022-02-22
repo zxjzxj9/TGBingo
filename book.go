@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/antchfx/htmlquery"
 	"net/http"
-	"net/url"
 	"os"
 	"strings"
 	"sync"
@@ -13,7 +12,7 @@ import (
 // Scraper for books
 var (
 	header http.Header
-	wg sync.WaitGroup
+	wg     sync.WaitGroup
 )
 
 func init() {
@@ -29,16 +28,16 @@ func init() {
 	header.Add("upgrade-insecure-requests", "1")
 }
 
-func crawl(pageId int, c chan <- float32) (string, error) {
+func crawl(pageId int, c chan<- float32) (string, error) {
 	// defer wg.Done()
-	proxyUrl, err := url.Parse("http://127.0.0.1:8118")
+	// proxyUrl, err := url.Parse("http://127.0.0.1:8118")
 
-	if err != nil {
-		fmt.Println("Failed to create proxy ", err)
-		return "", err
-	}
-	client := &http.Client{Transport: &http.Transport{Proxy: http.ProxyURL(proxyUrl)}}
-	// client := &http.Client{}
+	// if err != nil {
+	// 	fmt.Println("Failed to create proxy ", err)
+	// 	return "", err
+	// }
+	// client := &http.Client{Transport: &http.Transport{Proxy: http.ProxyURL(proxyUrl)}}
+	client := &http.Client{}
 	fmt.Println(fmt.Sprintf("https://cn.uukanshu.cc/book/%d/", pageId))
 	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("https://cn.uukanshu.cc/book/%d/", pageId), nil)
 	req.Header = header
@@ -61,7 +60,7 @@ func crawl(pageId int, c chan <- float32) (string, error) {
 	}
 
 	fname := fmt.Sprintf("cache/%d.txt", pageId)
-	fout, err := os.OpenFile(fname, os.O_WRONLY | os.O_CREATE, 0755)
+	fout, err := os.OpenFile(fname, os.O_WRONLY|os.O_CREATE, 0755)
 	defer fout.Close()
 
 	// fmt.Println(htmlquery.InnerText(indexPage))
@@ -79,7 +78,7 @@ func crawl(pageId int, c chan <- float32) (string, error) {
 		}
 
 		// fmt.Println(idx)
-		c <- float32(idx+1)/float32(len(nodes))
+		c <- float32(idx+1) / float32(len(nodes))
 
 		url := htmlquery.InnerText(p)
 		req, err := http.NewRequest(http.MethodGet, url, nil)
