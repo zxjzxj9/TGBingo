@@ -4,3 +4,4 @@ bingo
 bingo_single
 SERVER
 *.db
+config.json
