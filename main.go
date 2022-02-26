@@ -399,10 +399,11 @@ Help:
 			}
 			fmt.Println(string(respData))
 		} else if strings.HasPrefix(strings.Trim(chatInfo.Message.Text, " \n"), "/book") {
-			bookId, err := strconv.Atoi(strings.Split(strings.Trim(chatInfo.Message.Text, " \n"), " ")[1])
+			bookId, err := strconv.Atoi(strings.Trim(strings.Replace(chatInfo.Message.Text, "/book", "", -1), " \n"))
 			if err != nil {
 				sendMsg(chatInfo.Message.Chat.ID, fmt.Sprintf("Invalid bookId: %d", bookId))
 				sendMsg(chatInfo.Message.Chat.ID, err.Error())
+				return
 			}
 			c := make(chan float32)
 			go crawl(bookId, c)
