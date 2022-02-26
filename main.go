@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/winterssy/mxget/pkg/provider"
@@ -176,41 +177,20 @@ func sendFile(filePath string, chatId int, caption string) error {
 
 func main() {
 	fmt.Println("Start TG bot server")
+	configFile := flag.String("config", "./config.json", "Config file path")
+	flag.Parse()
+
+	configData, err := loadConfig(*configFile)
+	if err != nil {
+		return
+	}
 
 	rand.Seed(time.Now().UnixNano())
 	chars := []rune("0123456789")
 
-	// Read telegram token from file
-	fmt.Println("Read TG token...")
-	f, err := os.Open("TG_TOKEN")
-	if err != nil {
-		fmt.Println("Fail to read TG token")
-		return
-	}
-	s, err := ioutil.ReadAll(f)
-	if err != nil {
-		fmt.Println("Read token file failure")
-		return
-	}
-	TG_TOKEN = strings.Trim(string(s), " \n")
-	f.Close()
-	fmt.Printf("Read token success, token value: %s\n", TG_TOKEN)
-
-	// Read telegram url from file
-	fmt.Println("Read server addr...")
-	f, err = os.Open("SERVER")
-	if err != nil {
-		fmt.Println("Fail to read server")
-		return
-	}
-	s, err = ioutil.ReadAll(f)
-	if err != nil {
-		fmt.Println("Read server file failure")
-		return
-	}
-	SERVER = strings.Trim(string(s), " \n")
-	f.Close()
-	fmt.Printf("Read server success, token value: %s\n", SERVER)
+	TG_TOKEN = configData.TGToken
+	SERVER = configData.Server
+	fmt.Printf("Running server %s\n", SERVER)
 
 	fmt.Println("Remove all previous webhooks...")
 	resp, err := http.Get(fmt.Sprintf("https://api.telegram.org/bot%s/getWebhookInfo", TG_TOKEN))
