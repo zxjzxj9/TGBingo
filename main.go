@@ -21,8 +21,7 @@ import (
 )
 
 var (
-	TG_TOKEN string
-	SERVER   string
+	ConfigData *Config
 )
 
 type ChatInfo struct {
@@ -63,7 +62,7 @@ type WebHookInfo struct {
 func sendMsg(chatId int, text string) {
 	// resp
 	resp, err := http.Get(fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage?chat_id=%d&text=%s",
-		TG_TOKEN, chatId, url.QueryEscape(text)))
+		ConfigData.TGToken, chatId, url.QueryEscape(text)))
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -77,7 +76,7 @@ func sendMsg(chatId int, text string) {
 func sendMarkdown(chatId int, text string) {
 	// resp
 	resp, err := http.Get(fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage?chat_id=%d&text=%s&parse_mode=MarkdownV2",
-		TG_TOKEN, chatId, url.QueryEscape(text)))
+		ConfigData.TGToken, chatId, url.QueryEscape(text)))
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -91,7 +90,7 @@ func sendMarkdown(chatId int, text string) {
 func sendHTML(chatId int, text string) {
 	// resp
 	resp, err := http.Get(fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage?chat_id=%d&text=%s&parse_mode=HTML",
-		TG_TOKEN, chatId, url.QueryEscape(text)))
+		ConfigData.TGToken, chatId, url.QueryEscape(text)))
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -166,7 +165,7 @@ func sendFile(filePath string, chatId int, caption string) error {
 		"caption":  strings.NewReader(caption),
 	}
 
-	err = upload(client, fmt.Sprintf("https://api.telegram.org/bot%s/sendDocument", TG_TOKEN), values)
+	err = upload(client, fmt.Sprintf("https://api.telegram.org/bot%s/sendDocument", ConfigData.TGToken), values)
 
 	if err != nil {
 		fmt.Println(err)
@@ -180,7 +179,8 @@ func main() {
 	configFile := flag.String("config", "./config.json", "Config file path")
 	flag.Parse()
 
-	configData, err := loadConfig(*configFile)
+	var err error
+	ConfigData, err = loadConfig(*configFile)
 	if err != nil {
 		return
 	}
@@ -188,12 +188,10 @@ func main() {
 	rand.Seed(time.Now().UnixNano())
 	chars := []rune("0123456789")
 
-	TG_TOKEN = configData.TGToken
-	SERVER = configData.Server
-	fmt.Printf("Running server %s\n", SERVER)
+	fmt.Printf("Running server %s\n", ConfigData.Server)
 
 	fmt.Println("Remove all previous webhooks...")
-	resp, err := http.Get(fmt.Sprintf("https://api.telegram.org/bot%s/getWebhookInfo", TG_TOKEN))
+	resp, err := http.Get(fmt.Sprintf("https://api.telegram.org/bot%s/getWebhookInfo", ConfigData.TGToken))
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -209,7 +207,7 @@ func main() {
 	json.Unmarshal(respData, &webHookInfo)
 	fmt.Printf("Current webhook info: %v", webHookInfo)
 	resp, err = http.Get(fmt.Sprintf("https://api.telegram.org/bot%s/deleteWebhook?url=%s",
-		TG_TOKEN, webHookInfo.Result.URL))
+		ConfigData.TGToken, webHookInfo.Result.URL))
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -222,7 +220,7 @@ func main() {
 	fmt.Println(string(respData))
 	fmt.Println("Remove success, adding new webhook...")
 	resp, err = http.Get(fmt.Sprintf("https://api.telegram.org/bot%s/setWebhook?url=%s",
-		TG_TOKEN, SERVER))
+		ConfigData.TGToken, ConfigData.Server))
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -358,7 +356,7 @@ Help:
 
 		} else if strings.HasPrefix(strings.Trim(chatInfo.Message.Text, " \n"), "/dice") {
 			resp, err := http.Get(fmt.Sprintf("https://api.telegram.org/bot%s/sendDice?chat_id=%d&emoji=%s",
-				TG_TOKEN, chatInfo.Message.Chat.ID, "🎲"))
+				ConfigData.TGToken, chatInfo.Message.Chat.ID, "🎲"))
 			if err != nil {
 				fmt.Println(err)
 			}
@@ -369,7 +367,7 @@ Help:
 			fmt.Println(string(respData))
 		} else if strings.HasPrefix(strings.Trim(chatInfo.Message.Text, " \n"), "/dart") {
 			resp, err := http.Get(fmt.Sprintf("https://api.telegram.org/bot%s/sendDice?chat_id=%d&emoji=%s",
-				TG_TOKEN, chatInfo.Message.Chat.ID, "🎯"))
+				ConfigData.TGToken, chatInfo.Message.Chat.ID, "🎯"))
 			if err != nil {
 				fmt.Println(err)
 			}
@@ -389,7 +387,7 @@ Help:
 			go crawl(bookId, c)
 			go func(c <-chan float32) {
 				sendMsg(chatInfo.Message.Chat.ID, "Generating book link...")
-				u, err := url.Parse(SERVER)
+				u, err := url.Parse(ConfigData.Server)
 				if err != nil {
 					fmt.Println("url parse error...")
 				}
@@ -411,7 +409,7 @@ Help:
 							"chat_id":  strings.NewReader(strconv.Itoa(chatInfo.Message.Chat.ID)),
 						}
 
-						err = upload(client, fmt.Sprintf("https://api.telegram.org/bot%s/sendDocument", TG_TOKEN), values)
+						err = upload(client, fmt.Sprintf("https://api.telegram.org/bot%s/sendDocument", ConfigData.TGToken), values)
 
 						if err != nil {
 							fmt.Println(err)
@@ -440,7 +438,7 @@ Help:
 					return
 				}
 				resp, err := http.Get(fmt.Sprintf("https://api.telegram.org/bot%s/sendDocument?chat_id=%d&document=%s",
-					TG_TOKEN, chatInfo.Message.Chat.ID, url))
+					ConfigData.TGToken, chatInfo.Message.Chat.ID, url))
 				if err != nil {
 					data, err := ioutil.ReadAll(resp.Body)
 					fmt.Println(data)
