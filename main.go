@@ -277,6 +277,7 @@ Help:
  #    # ###### #    #  ####
 </code>
 ####################
+	/cat -- post a random cute cat image
     /dice -- cast a dice
     /dart -- cast a dart
     /bingo -- play a bingo game
