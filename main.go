@@ -283,6 +283,7 @@ Help:
     /bingo -- play a bingo game
     /nhknews -- get nhk news from rss
     /investing -- get investing news from rss
+    /googleai -- get google AI news
     /book {bookid} -- download a book
 	/sensor -- current room status
 	/search_song {song info} -- search a song and generate download link
@@ -290,6 +291,10 @@ Help:
 `)
 		} else if strings.HasPrefix(strings.Trim(chatInfo.Message.Text, " \n"), "/nhknews") {
 			for _, rss := range getFeed("http://www3.nhk.or.jp/rss/news/cat0.xml") {
+				sendMsg(chatInfo.Message.Chat.ID, rss)
+			}
+		} else if strings.HasPrefix(strings.Trim(chatInfo.Message.Text, " \n"), "/googleai") {
+			for _, rss := range getFeed("https://blog.google/technology/ai/rss/") {
 				sendMsg(chatInfo.Message.Chat.ID, rss)
 			}
 		} else if strings.HasPrefix(strings.Trim(chatInfo.Message.Text, " \n"), "/investing") {
