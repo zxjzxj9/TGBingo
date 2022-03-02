@@ -531,8 +531,6 @@ Help:
 					} else {
 						sendMsg(players["B"], "Sorry you lose!")
 					}
-					// sendMsg(players["A"], fmt.Sprintf("The correct number is: %s", target))
-					// sendMsg(players["B"], fmt.Sprintf("The correct number is: %s", target))
 				}
 			} else {
 				text, _, _ := isBingo(predict, target)
