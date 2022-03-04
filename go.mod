@@ -6,6 +6,7 @@ require (
 	github.com/antchfx/htmlquery v1.2.4
 	github.com/apache/arrow/go/arrow v0.0.0-20211112161151-bc219186db40 // indirect
 	github.com/bogem/id3v2 v1.1.1
+	github.com/c9s/goprocinfo v0.0.0-20210130143923-c95fcf8c64a8
 	github.com/chewxy/math32 v1.10.1 // indirect
 	github.com/gin-gonic/gin v1.7.7
 	github.com/gogo/protobuf v1.3.2 // indirect

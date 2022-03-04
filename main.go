@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	linuxproc "github.com/c9s/goprocinfo/linux"
 	"github.com/gin-gonic/gin"
 	"github.com/winterssy/mxget/pkg/provider"
 	"go.eqrx.net/mauzr/pkg/bme/bme680"
@@ -293,6 +294,19 @@ Help:
 			for _, rss := range getFeed("http://www3.nhk.or.jp/rss/news/cat0.xml") {
 				sendMsg(chatInfo.Message.Chat.ID, rss)
 			}
+		} else if strings.HasPrefix(strings.Trim(chatInfo.Message.Text, " \n"), "/stat") {
+			// stat1, err := linuxproc.ReadStat("/proc/stat")
+			// 	if err != nil {
+			// 		sendMsg(chatInfo.Message.Chat.ID, fmt.Sprintf("Error read cpu info %s", err.Error()))
+			// 		return
+			// 	}
+			stat2, err := linuxproc.ReadMemInfo("/proc/meminfo")
+			if err != nil {
+				sendMsg(chatInfo.Message.Chat.ID, fmt.Sprintf("Error read mem info %s", err.Error()))
+				return
+			}
+			sendMsg(chatInfo.Message.Chat.ID, fmt.Sprintf("Memory usage: %4.3f",
+				float64(stat2.MemTotal-stat2.MemFree)/float64(stat2.MemTotal)))
 		} else if strings.HasPrefix(strings.Trim(chatInfo.Message.Text, " \n"), "/googleai") {
 			for _, rss := range getFeed("https://blog.google/technology/ai/rss/") {
 				sendMsg(chatInfo.Message.Chat.ID, rss)
