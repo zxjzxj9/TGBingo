@@ -294,6 +294,10 @@ Help:
 			for _, rss := range getFeed("http://www3.nhk.or.jp/rss/news/cat0.xml") {
 				sendMsg(chatInfo.Message.Chat.ID, rss)
 			}
+		} else if strings.HasPrefix(strings.Trim(chatInfo.Message.Text, " \n"), "/dw") {
+			for _, rss := range getFeed("https://rss.dw.com/xml/rss-de-all") {
+				sendMsg(chatInfo.Message.Chat.ID, rss)
+			}
 		} else if strings.HasPrefix(strings.Trim(chatInfo.Message.Text, " \n"), "/stat") {
 			// stat1, err := linuxproc.ReadStat("/proc/stat")
 			// 	if err != nil {
