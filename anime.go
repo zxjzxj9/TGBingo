@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/nfnt/resize"
 	ts "gorgonia.org/tensor"
 	"image"
 	"io"
@@ -9,7 +10,13 @@ import (
 
 func animeGAN(reader io.Reader) []byte {
 	//encode jpeg to arryy
-	img, _, err := image.Decode(reader)
+	imgRaw, _, err := image.Decode(reader)
+	// imgRawHeight := imgRaw.Bounds().Max.Y
+	// imgRawWidth := imgRaw.Bounds().Max.X
+
+	// Resize the image to 64x64
+	img := resize.Resize(512, 512, imgRaw, resize.Lanczos3)
+
 	if err != nil {
 		fmt.Println(err.Error())
 	}
@@ -34,6 +41,9 @@ func animeGAN(reader io.Reader) []byte {
 	if !ok {
 		fmt.Println("Error conversion image data")
 	}
+
+	// Load ONNX model
+	// model, err := LoadModel("model/anime.onnx")
 
 	return nil
 }

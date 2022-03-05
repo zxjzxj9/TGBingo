@@ -13,6 +13,7 @@ require (
 	github.com/google/flatbuffers v2.0.5+incompatible // indirect
 	github.com/mattn/go-sqlite3 v1.14.11 // indirect
 	github.com/mmcdole/gofeed v1.1.3
+	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 	github.com/winterssy/ghttp v0.0.0-20200904031839-b68c76d629d9
 	github.com/winterssy/glog v0.0.0-20200305052031-8e145d5ae4ef
 	github.com/winterssy/mxget v0.0.0-20200904042619-69f4c144fa26
