@@ -1,6 +1,7 @@
 package main
 
 import (
+	"embed"
 	"fmt"
 	"github.com/nfnt/resize"
 	ts "gorgonia.org/tensor"
@@ -44,6 +45,9 @@ func animeGAN(reader io.Reader) []byte {
 
 	// Load ONNX model
 	// model, err := LoadModel("model/anime.onnx")
-
+	// go:embed:"./face_paint_512_v2_0.onnx"
+	var f embed.FS
+	data, _ := f.ReadFile("./face_paint_512_v2_0.onnx")
+	fmt.Println(data)
 	return nil
 }
