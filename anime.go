@@ -4,6 +4,8 @@ import (
 	"embed"
 	"fmt"
 	"github.com/nfnt/resize"
+	"github.com/owulveryck/onnx-go"
+	gorgonnx "github.com/owulveryck/onnx-go/backend/x/gorgonnx"
 	ts "gorgonia.org/tensor"
 	"image"
 	"io"
@@ -49,5 +51,12 @@ func animeGAN(reader io.Reader) []byte {
 	var f embed.FS
 	data, _ := f.ReadFile("./face_paint_512_v2_0.onnx")
 	fmt.Println(data)
+	backend := gorgonnx.NewGraph()
+	model := onnx.NewModel(backend)
+	err = model.UnmarshalBinary(data)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
 	return nil
 }
