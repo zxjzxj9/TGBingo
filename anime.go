@@ -58,5 +58,17 @@ func animeGAN(reader io.Reader) []byte {
 		fmt.Println(err.Error())
 	}
 
+	err = model.SetInput(0, imgT)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	imgA, err := model.GetOutputTensors()
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	fmt.Println(imgA)
+
 	return nil
 }
