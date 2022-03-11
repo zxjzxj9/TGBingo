@@ -8,6 +8,7 @@ import (
 	gorgonnx "github.com/owulveryck/onnx-go/backend/x/gorgonnx"
 	ts "gorgonia.org/tensor"
 	"image"
+	"image/color"
 	"io"
 )
 
@@ -63,12 +64,30 @@ func animeGAN(reader io.Reader) []byte {
 		fmt.Println(err.Error())
 	}
 
-	imgA, err := model.GetOutputTensors()
+	ret, err := model.GetOutputTensors()
 	if err != nil {
 		fmt.Println(err.Error())
 	}
-
+	imgA := ret[0]
 	fmt.Println(imgA)
+
+	imgC := image.NewRGBA(image.Rect(0, 0, 512, 512))
+
+	// set rgb float32 value back to the image
+	for y := 0; y < height; y++ {
+		for x := 0; x < width; x++ {
+			// r, g, b, _ := img.At(x, y).RGBA()
+			r, _ := imgA.At(0, 0, y, x)
+			g, _ := imgA.At(0, 1, y, x)
+			b, _ := imgA.At(0, 2, y, x)
+			color := color.RGBA{
+				uint8(r.(float32) * 255),
+				uint8(g.(float32) * 255),
+				uint8(b.(float32) * 255),
+				255}
+			imgC.Set(x, y, color)
+		}
+	}
 
 	return nil
 }
