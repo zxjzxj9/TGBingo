@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"embed"
 	"fmt"
 	"github.com/nfnt/resize"
@@ -9,11 +10,12 @@ import (
 	ts "gorgonia.org/tensor"
 	"image"
 	"image/color"
+	"image/png"
 	"io"
 )
 
 func animeGAN(reader io.Reader) []byte {
-	//encode jpeg to arryy
+	//encode jpeg to array
 	imgRaw, _, err := image.Decode(reader)
 	// imgRawHeight := imgRaw.Bounds().Max.Y
 	// imgRawWidth := imgRaw.Bounds().Max.X
@@ -88,6 +90,13 @@ func animeGAN(reader io.Reader) []byte {
 			imgC.Set(x, y, color)
 		}
 	}
+	imgD := resize.Resize(uint(width), uint(height), imgC, resize.Lanczos3)
 
-	return nil
+	buf := bytes.NewBuffer([]byte{})
+	err = png.Encode(buf, imgD)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	return buf.Bytes()
 }
