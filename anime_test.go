@@ -10,5 +10,6 @@ func TestAnimeGAN(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
+	_ = animeGAN(reader)
 	defer reader.Close()
 }
