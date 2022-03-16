@@ -10,6 +10,11 @@ func TestAnimeGAN(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	_ = animeGAN(reader)
-	defer reader.Close()
+	outFile := animeGAN(reader)
+	writer, err := os.Create("test2.png")
+	if err != nil {
+		t.Error(err)
+	}
+	writer.Write(outFile)
+	defer reader.Close(), writer.Close()
 }
