@@ -53,7 +53,7 @@ func animeGAN(reader io.Reader) []byte {
 	// go:embed:"./face_paint_512_v2_0.onnx"
 	var f embed.FS
 	data, _ := f.ReadFile("./face_paint_512_v2_0.onnx")
-	fmt.Println(data)
+	// fmt.Println(data)
 	backend := gorgonnx.NewGraph()
 	model := onnx.NewModel(backend)
 	err = model.UnmarshalBinary(data)

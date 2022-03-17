@@ -1,12 +1,16 @@
 package main
 
 import (
+	"embed"
 	"os"
 	"testing"
 )
 
 func TestAnimeGAN(t *testing.T) {
-	reader, err := os.Open("test.png")
+	// go:embed:"./face_paint_512_v2_0.onnx"
+	var f embed.FS
+	reader, err := f.Open("./test.png")
+	// reader, err := os.Open("test.png")
 	if err != nil {
 		t.Error(err)
 	}
@@ -16,5 +20,6 @@ func TestAnimeGAN(t *testing.T) {
 		t.Error(err)
 	}
 	writer.Write(outFile)
-	defer reader.Close(), writer.Close()
+	defer reader.Close()
+	defer writer.Close()
 }
