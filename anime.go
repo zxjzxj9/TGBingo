@@ -1,12 +1,13 @@
 package main
 
+/*
 import (
 	"bytes"
 	"embed"
 	"fmt"
 	"github.com/nfnt/resize"
 	"github.com/owulveryck/onnx-go"
-	gorgonnx "github.com/owulveryck/onnx-go/backend/x/gorgonnx"
+	"github.com/owulveryck/onnx-go/backend/x/gorgonnx"
 	ts "gorgonia.org/tensor"
 	"image"
 	"image/color"
@@ -100,3 +101,4 @@ func animeGAN(reader io.Reader) []byte {
 
 	return buf.Bytes()
 }
+*/

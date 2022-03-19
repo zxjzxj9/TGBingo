@@ -8,14 +8,11 @@ require (
 	github.com/c9s/goprocinfo v0.0.0-20210130143923-c95fcf8c64a8
 	github.com/gin-gonic/gin v1.7.7
 	github.com/mmcdole/gofeed v1.1.3
-	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
-	github.com/owulveryck/onnx-go v0.5.0
 	github.com/winterssy/ghttp v0.0.0-20200904031839-b68c76d629d9
 	github.com/winterssy/glog v0.0.0-20200305052031-8e145d5ae4ef
 	github.com/winterssy/mxget v0.0.0-20200904042619-69f4c144fa26
 	go.eqrx.net/mauzr v0.0.0-20200908184101-9491308f9412
 	golang.org/x/net v0.0.0-20210614182718-04defd469f4e
-	gorgonia.org/tensor v0.9.21
 	gorm.io/driver/sqlite v1.2.6
 	gorm.io/gorm v1.22.5
 )
@@ -46,6 +43,8 @@ require (
 	github.com/mmcdole/goxpp v0.0.0-20181012175147-0068e33feabf // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.1 // indirect
+	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646 // indirect
+	github.com/owulveryck/onnx-go v0.5.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/ugorji/go/codec v1.1.7 // indirect
 	github.com/winterssy/bufferpool v0.0.0-20200229012952-527e7777fcd3 // indirect
@@ -63,6 +62,7 @@ require (
 	gorgonia.org/cu v0.9.0-beta // indirect
 	gorgonia.org/dawson v1.1.0 // indirect
 	gorgonia.org/gorgonia v0.9.4 // indirect
+	gorgonia.org/tensor v0.9.21 // indirect
 	gorgonia.org/vecf32 v0.9.0 // indirect
 	gorgonia.org/vecf64 v0.9.0 // indirect
 )
