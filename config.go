@@ -9,6 +9,7 @@ import (
 
 type Config struct {
 	Server  string `json:"server""`
+	Weather string `json:"weather""`
 	TGToken string `json:"tg_token"`
 }
 
