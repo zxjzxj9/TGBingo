@@ -58,7 +58,7 @@ type Weather struct {
 func getWeather(city string, appid string) string {
 	// e.g. q = Singapore
 	url1 := "http://api.openweathermap.org/geo/1.0/direct?q=%s&limit=1&appid=%s"
-	url2 := "https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}"
+	url2 := "https://api.openweathermap.org/data/2.5/weather?lat=%f&lon=%f&appid=%s"
 	ret, err := http.Get(fmt.Sprintf(url1, city, appid))
 	if err != nil {
 		fmt.Println(err)
@@ -69,6 +69,11 @@ func getWeather(city string, appid string) string {
 	if err != nil {
 		fmt.Println(err)
 		return "geology request decode failed"
+	}
+	ret, err = http.Get(fmt.Sprintf(url2, location[0].Lat, location[0].Lon, appid))
+	if err != nil {
+		fmt.Println(err)
+		return "weather request failed"
 	}
 	fmt.Println(url1, url2, ret)
 	return "It's sunny in " + city
