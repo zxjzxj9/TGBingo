@@ -71,6 +71,8 @@ func getWeather(city string, appid string) string {
 		return "geology request decode failed"
 	}
 	ret, err = http.Get(fmt.Sprintf(url2, location[0].Lat, location[0].Lon, appid))
+	weather := Weather{}
+	err = json.NewDecoder(ret.Body).Decode(&weather)
 	if err != nil {
 		fmt.Println(err)
 		return "weather request failed"
