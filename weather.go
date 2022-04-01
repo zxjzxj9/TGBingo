@@ -55,7 +55,7 @@ type Weather struct {
 	Cod      int    `json:"cod"`
 }
 
-func getWeather(city string, appid string) string {
+func GetWeather(city string, appid string) string {
 	// e.g. q = Singapore
 	url1 := "http://api.openweathermap.org/geo/1.0/direct?q=%s&limit=1&appid=%s"
 	url2 := "https://api.openweathermap.org/data/2.5/weather?lat=%f&lon=%f&appid=%s"

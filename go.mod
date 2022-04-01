@@ -8,6 +8,7 @@ require (
 	github.com/c9s/goprocinfo v0.0.0-20210130143923-c95fcf8c64a8
 	github.com/gin-gonic/gin v1.7.7
 	github.com/mmcdole/gofeed v1.1.3
+	github.com/stretchr/testify v1.7.0
 	github.com/winterssy/ghttp v0.0.0-20200904031839-b68c76d629d9
 	github.com/winterssy/glog v0.0.0-20200305052031-8e145d5ae4ef
 	github.com/winterssy/mxget v0.0.0-20200904042619-69f4c144fa26
@@ -25,6 +26,7 @@ require (
 	github.com/awalterschulze/gographviz v0.0.0-20190522210029-fa59802746ab // indirect
 	github.com/chewxy/hm v1.0.0 // indirect
 	github.com/chewxy/math32 v1.10.1 // indirect
+	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-playground/locales v0.13.0 // indirect
 	github.com/go-playground/universal-translator v0.17.0 // indirect
@@ -46,6 +48,7 @@ require (
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646 // indirect
 	github.com/owulveryck/onnx-go v0.5.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
+	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/ugorji/go/codec v1.1.7 // indirect
 	github.com/winterssy/bufferpool v0.0.0-20200229012952-527e7777fcd3 // indirect
 	github.com/winterssy/gjson v0.0.0-20200306020332-1f68efaec187 // indirect
@@ -59,6 +62,7 @@ require (
 	gonum.org/v1/gonum v0.9.3 // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
 	gopkg.in/yaml.v2 v2.2.8 // indirect
+	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c // indirect
 	gorgonia.org/cu v0.9.0-beta // indirect
 	gorgonia.org/dawson v1.1.0 // indirect
 	gorgonia.org/gorgonia v0.9.4 // indirect

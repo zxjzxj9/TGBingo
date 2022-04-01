@@ -1,7 +1,12 @@
 package main
 
-import "testing"
+import (
+	"github.com/stretchr/testify/assert"
+	"testing"
+)
 
-func TestConcurrentDownload(t *testing.T) {
-
+func TestGetWeather(t *testing.T) {
+	ConfigData, err := loadConfig("./config.json")
+	assert.Equal(t, err, nil, "Load config file error!")
+	GetWeather("London", ConfigData.WeatherToken)
 }

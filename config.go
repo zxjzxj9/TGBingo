@@ -8,9 +8,9 @@ import (
 )
 
 type Config struct {
-	Server  string `json:"server""`
-	Weather string `json:"weather""`
-	TGToken string `json:"tg_token"`
+	Server       string `json:"server""`
+	WeatherToken string `json:"weather_token""`
+	TGToken      string `json:"tg_token"`
 }
 
 func loadConfig(fname string) (*Config, error) {
