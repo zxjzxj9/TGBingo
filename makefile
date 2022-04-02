@@ -1,6 +1,6 @@
 .PHONY: test
 test:
-	go test -v -run TestAnimeGAN
+	go test -v -run TestGetWeather
 
 .PHONY: bingo_rpi
 bingo_rpi:
