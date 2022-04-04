@@ -78,5 +78,5 @@ func GetWeather(city string, appid string) string {
 		return "weather request failed"
 	}
 	fmt.Println(url1, url2, ret)
-	return "It's sunny in " + city
+	return fmt.Sprintf("It's %s in %s, %s", weather.Weather[0].Description, weather.Name, weather.Sys.Country)
 }
