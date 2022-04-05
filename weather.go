@@ -79,7 +79,7 @@ func GetWeather(city string, appid string) string {
 	}
 	fmt.Println(url1, url2, ret)
 	return fmt.Sprintf("It's %s in %s, temperature %3.1f °C ~ %3.1f °C, feels like %3.1f °C, pressure %d hPa, humidity %d%%",
-		weather.Weather[0].Description, weather.Sys.Country,
+		weather.Weather[0].Description, city+", "+weather.Sys.Country,
 		weather.Main.TempMin-273.15, weather.Main.TempMax-273.15,
 		weather.Main.FeelsLike-273.15, weather.Main.Pressure, weather.Main.Humidity)
 }
