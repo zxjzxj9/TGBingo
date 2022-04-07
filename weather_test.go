@@ -11,4 +11,6 @@ func TestGetWeather(t *testing.T) {
 	assert.Equal(t, err, nil, "Load config file error!")
 	ret := GetWeather("Shanghai", ConfigData.WeatherToken)
 	fmt.Println(ret)
+	ret = GetWeather("Singapore", ConfigData.WeatherToken)
+	fmt.Println(ret)
 }
