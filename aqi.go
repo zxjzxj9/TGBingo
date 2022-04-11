@@ -8,7 +8,7 @@ import (
 
 func GetAQI(city string, appid string) string {
 	url1 := "http://api.openweathermap.org/geo/1.0/direct?q=%s&limit=1&appid=%s"
-	url2 := "https://api.openweathermap.org/data/2.5/weather?lat=%f&lon=%f&appid=%s"
+	url2 := "http://api.openweathermap.org/data/2.5/air_pollution?lat=%f&lon=%f&appid=%s"
 	ret, err := http.Get(fmt.Sprintf(url1, city, appid))
 	if err != nil {
 		fmt.Println(err)
