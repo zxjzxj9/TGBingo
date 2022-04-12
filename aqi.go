@@ -6,6 +6,29 @@ import (
 	"net/http"
 )
 
+type AQI struct {
+	Coord struct {
+		Lon float64 `json:"lon"`
+		Lat float64 `json:"lat"`
+	} `json:"coord"`
+	List []struct {
+		Main struct {
+			Aqi int `json:"aqi"`
+		} `json:"main"`
+		Components struct {
+			Co   float64 `json:"co"`
+			No   int     `json:"no"`
+			No2  float64 `json:"no2"`
+			O3   float64 `json:"o3"`
+			So2  float64 `json:"so2"`
+			Pm25 float64 `json:"pm2_5"`
+			Pm10 float64 `json:"pm10"`
+			Nh3  float64 `json:"nh3"`
+		} `json:"components"`
+		Dt int `json:"dt"`
+	} `json:"list"`
+}
+
 func GetAQI(city string, appid string) string {
 	url1 := "http://api.openweathermap.org/geo/1.0/direct?q=%s&limit=1&appid=%s"
 	url2 := "http://api.openweathermap.org/data/2.5/air_pollution?lat=%f&lon=%f&appid=%s"
