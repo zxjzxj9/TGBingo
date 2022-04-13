@@ -46,5 +46,7 @@ func GetAQI(city string, appid string) string {
 		return "geology request decode failed"
 	}
 	ret, err = http.Get(fmt.Sprintf(url2, location[0].Lat, location[0].Lon, appid))
-	return ""
+	aqi := AQI{}
+	err = json.NewDecoder(ret.Body).Decode(&aqi)
+	return fmt.Sprintf("Air quality index: %d", aqi.List[0].Main.Aqi)
 }
