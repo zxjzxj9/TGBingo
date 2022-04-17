@@ -1,6 +1,6 @@
 .PHONY: test
 test:
-	go test -v -run TestGetWeather
+	go test -v -run TestGetAQI
 
 .PHONY: bingo_rpi
 bingo_rpi:

@@ -48,5 +48,5 @@ func GetAQI(city string, appid string) string {
 	ret, err = http.Get(fmt.Sprintf(url2, location[0].Lat, location[0].Lon, appid))
 	aqi := AQI{}
 	err = json.NewDecoder(ret.Body).Decode(&aqi)
-	return fmt.Sprintf("Air quality index: %d, pm2.5 index: ", aqi.List[0].Main.Aqi, aqi.List[0].Components.Pm25)
+	return fmt.Sprintf("Air quality index: %d, pm2.5 index: %4.2f", aqi.List[0].Main.Aqi, aqi.List[0].Components.Pm25)
 }
