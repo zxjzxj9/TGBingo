@@ -294,8 +294,8 @@ Help:
 		} else if strings.HasPrefix(strings.Trim(chatInfo.Message.Text, " \n"), "/weather") {
 			city := strings.Trim(strings.Replace(chatInfo.Message.Text, "/weather", "", -1), " \n")
 			sendMsg(chatInfo.Message.Chat.ID, GetWeather(city, ConfigData.WeatherToken))
-		} else if strings.HasPrefix(strings.Trim(chatInfo.Message.Text, " \n"), "/weather") {
-			city := strings.Trim(strings.Replace(chatInfo.Message.Text, "/weather", "", -1), " \n")
+		} else if strings.HasPrefix(strings.Trim(chatInfo.Message.Text, " \n"), "/aqi") {
+			city := strings.Trim(strings.Replace(chatInfo.Message.Text, "/aqi", "", -1), " \n")
 			sendMsg(chatInfo.Message.Chat.ID, GetAQI(city, ConfigData.WeatherToken))
 		} else if strings.HasPrefix(strings.Trim(chatInfo.Message.Text, " \n"), "/nhknews") {
 			for _, rss := range getFeed("http://www3.nhk.or.jp/rss/news/cat0.xml") {
