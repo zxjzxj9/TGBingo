@@ -95,12 +95,12 @@ func GetStockQuotes(symbols []string, dataFormat ...int) (quotes Quotes, err err
 
 	//fmt.Println(urlString)
 	if resp, err = http.Get(urlString); err != nil {
-		return
+		return nil, err
 	}
 	defer resp.Body.Close()
 
 	if buf, err = ioutil.ReadAll(resp.Body); err != nil {
-		return
+		return nil, err
 	}
 
 	//unmarshal the json/xml response
@@ -109,21 +109,21 @@ func GetStockQuotes(symbols []string, dataFormat ...int) (quotes Quotes, err err
 	if currentDataFormat == XML_FORMAT {
 		if len(symbols) > 1 {
 			if err = xml.Unmarshal(buf, &yqr); err != nil {
-				return
+				return nil, err
 			}
 		} else {
 			if err = xml.Unmarshal(buf, &yqrs); err != nil {
-				return
+				return nil, err
 			}
 		}
 	} else {
 		if len(symbols) > 1 {
 			if err = json.Unmarshal(buf, &yqr); err != nil {
-				return
+				return nil, err
 			}
 		} else {
 			if err = json.Unmarshal(buf, &yqrs); err != nil {
-				return
+				return nil, err
 			}
 		}
 	}
@@ -135,5 +135,5 @@ func GetStockQuotes(symbols []string, dataFormat ...int) (quotes Quotes, err err
 		quotes = Quotes{yqrs.Query.Results.Quote}
 	}
 
-	return
+	return quotes, nil
 }
