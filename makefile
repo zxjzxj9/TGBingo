@@ -1,6 +1,6 @@
 .PHONY: test
 test:
-	go test -v -run TestGetAQI
+	go test -v -run TestGetStockQuotes
 
 .PHONY: bingo_rpi
 bingo_rpi:
