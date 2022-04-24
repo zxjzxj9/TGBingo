@@ -7,6 +7,8 @@ require (
 	github.com/bogem/id3v2 v1.1.1
 	github.com/c9s/goprocinfo v0.0.0-20210130143923-c95fcf8c64a8
 	github.com/gin-gonic/gin v1.7.7
+	github.com/markcheno/go-quote v0.0.0-20211116021555-bb34b59a97eb
+	github.com/markcheno/go-talib v0.0.0-20190307022042-cd53a9264d70
 	github.com/mmcdole/gofeed v1.1.3
 	github.com/stretchr/testify v1.7.0
 	github.com/winterssy/ghttp v0.0.0-20200904031839-b68c76d629d9
