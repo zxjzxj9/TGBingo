@@ -4,10 +4,12 @@ import (
 	"fmt"
 	"github.com/markcheno/go-quote"
 	"github.com/markcheno/go-talib"
+	"time"
 )
 
 func GetQuote(symbol string) (string, error) {
-	spy, _ := quote.NewQuoteFromYahoo("spy", "2016-01-01", "2016-04-01", quote.Daily, true)
+	date := time.Now().Format("2006-01-02")
+	spy, _ := quote.NewQuoteFromYahoo(symbol, date, date, quote.Daily, true)
 	fmt.Print(spy.CSV())
 	talib.Rsi(spy.Close, 2)
 	return "", nil
