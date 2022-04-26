@@ -3,7 +3,7 @@ package main
 import "testing"
 
 func TestGetStockQuotes(t *testing.T) {
-	quotes, err := GetStockQuotes([]string{"AAPL"}, XML_FORMAT)
+	quotes, err := GetQuote("AAPL")
 	if err != nil {
 		t.Errorf("Error getting stock quotes: %s", err)
 	}
