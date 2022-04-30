@@ -11,7 +11,5 @@ func GetQuote(symbol string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	// fmt.Print(spy.CSV())
-	// talib.Rsi(spy.Close, 2)
 	return spy.CSV(), nil
 }
