@@ -21,9 +21,6 @@ func randImage(query string) (string, error) {
 	indexPage, err := htmlquery.Parse(resp.Body)
 	nodes, err := htmlquery.QueryAll(indexPage, "//a/div/img")
 
-	// for _, node := range nodes {
-	// 	fmt.Println(node.Attr)
-	// }
 	indexRandom := rand.Intn(len(nodes))
 	node := nodes[indexRandom]
 	var src string
@@ -33,14 +30,6 @@ func randImage(query string) (string, error) {
 		}
 		fmt.Println(src)
 	}
-
-	// resp, err = http.Get(src)
-	// if err != nil {
-	// 	data, err := ioutil.ReadAll(resp.Body)
-	// 	fmt.Println(data)
-	// 	fmt.Println(err)
-	// 	return nil, err
-	// }
 
 	return src, nil
 }
