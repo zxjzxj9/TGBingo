@@ -291,6 +291,14 @@ Help:
 	/weather {city} -- current weather in the city
 ####################
 `)
+		} else if strings.HasPrefix(strings.Trim(chatInfo.Message.Text, " \n"), "/stock") {
+			symbol := strings.Trim(strings.Replace(chatInfo.Message.Text, "/stock", "", -1), " \n")
+			csv, err := GetQuote(symbol)
+			if err != nil {
+				sendMsg(chatInfo.Message.Chat.ID, csv)
+			} else {
+				sendMsg(chatInfo.Message.Chat.ID, err.Error())
+			}
 		} else if strings.HasPrefix(strings.Trim(chatInfo.Message.Text, " \n"), "/weather") {
 			city := strings.Trim(strings.Replace(chatInfo.Message.Text, "/weather", "", -1), " \n")
 			sendMsg(chatInfo.Message.Chat.ID, GetWeather(city, ConfigData.WeatherToken))
