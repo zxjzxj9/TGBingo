@@ -289,6 +289,7 @@ Help:
 	/sensor -- current room status
 	/search_song {song info} -- search a song and generate download link
 	/weather {city} -- current weather in the city
+    /stock {name} -- display stock market
 ####################
 `)
 		} else if strings.HasPrefix(strings.Trim(chatInfo.Message.Text, " \n"), "/stock") {
