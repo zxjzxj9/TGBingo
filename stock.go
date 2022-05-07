@@ -20,7 +20,7 @@ func GetQuote(symbol string) (string, error) {
 
 func GetQuotes(symbols []string) (string, error) {
 	date := time.Now().Format("2006-01-02")
-	file, err := ioutil.TempFile("dir", "prefix")
+	file, err := ioutil.TempFile(".", "tmp")
 	if err != nil {
 		log.Fatal(err)
 	}

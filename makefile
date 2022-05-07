@@ -1,5 +1,6 @@
 .PHONY: test
 test:
+	go test -v -run TestGetStockQuote
 	go test -v -run TestGetStockQuotes
 
 .PHONY: bingo_rpi
