@@ -294,7 +294,7 @@ Help:
 `)
 		} else if strings.HasPrefix(strings.Trim(chatInfo.Message.Text, " \n"), "/stock") {
 			symbol := strings.Trim(strings.Replace(chatInfo.Message.Text, "/stock", "", -1), " \n")
-			csv, err := GetQuote(symbol)
+			csv, err := GetQuote(symbol, time.Now().Format("2006-01-02"))
 			if err != nil {
 				sendMsg(chatInfo.Message.Chat.ID, csv)
 			} else {

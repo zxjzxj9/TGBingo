@@ -6,11 +6,9 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"time"
 )
 
-func GetQuote(symbol string) (string, error) {
-	date := time.Now().Format("2006-01-02")
+func GetQuote(symbol string, date string) (string, error) {
 	spy, err := quote.NewQuoteFromYahoo(symbol, date, date, quote.Daily, true)
 	if err != nil {
 		return "", err
@@ -18,8 +16,7 @@ func GetQuote(symbol string) (string, error) {
 	return spy.CSV(), nil
 }
 
-func GetQuotes(symbols []string) (string, error) {
-	date := time.Now().Format("2006-01-02")
+func GetQuotes(symbols []string, date string) (string, error) {
 	file, err := ioutil.TempFile(".", "tmp")
 	if err != nil {
 		log.Fatal(err)
