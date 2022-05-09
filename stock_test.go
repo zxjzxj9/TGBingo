@@ -6,7 +6,7 @@ import (
 )
 
 func TestGetStockQuote(t *testing.T) {
-	quotes, err := GetQuote("AAPL", "2022-05-01")
+	quotes, err := GetQuote("AAPL", "2022-05-06")
 	if err != nil {
 		t.Errorf("Error getting stock quotes: %s", err)
 	}
