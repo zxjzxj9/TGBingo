@@ -6,3 +6,8 @@ This is Go lang bot server used to communicate with Telegram's Bot. The scheme c
 then bot server reply user according to given instructions. It is basically a https sever, so I build the whole server based on gin-gonic framework.
 
 User <--> Telegram <--> Bot Server
+
+## Build
+Just use the command `go vendor` and `go build .` to build the running binary. If you want to run the binary on different arch/os, i.e. raspberry pi, just specify the GOARCH and GOOS env to the target arch/os.  
+
+## Serve
