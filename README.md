@@ -11,3 +11,12 @@ User <--> Telegram <--> Bot Server
 Just use the command `go vendor` and `go build .` to build the running binary. If you want to run the binary on different arch/os, i.e. raspberry pi, just specify the GOARCH and GOOS env to the target arch/os.  
 
 ## Serve
+Edit config.json file, add something like the followings, then start the server using `./server -c config.json`
+
+```
+{
+  server: "your_server_https_url",
+  weather_token: "token_from_openweathermap_org",
+  tg_toke: "telegram_bot_token"
+}
+```
