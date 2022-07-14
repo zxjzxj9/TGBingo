@@ -20,3 +20,6 @@ Edit config.json file, add something like the followings, then start the server 
   tg_toke: "telegram_bot_token"
 }
 ```
+
+## API Introduction
+The bot currently support several APIs, including the following.
