@@ -24,6 +24,8 @@ Edit config.json file, add something like the followings, then start the server 
 ## API Introduction
 The bot currently support several APIs, including the following.
 Help (type /help and it displays as floows):
+
+```
 ####################
  NekoRoid is a bot having a lot of fun
 
@@ -46,3 +48,4 @@ Help (type /help and it displays as floows):
  /sensor -- current room status
  /search_song {song info} -- search a song and generate download link
 ####################
+```
