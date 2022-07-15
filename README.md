@@ -23,3 +23,26 @@ Edit config.json file, add something like the followings, then start the server 
 
 ## API Introduction
 The bot currently support several APIs, including the following.
+Help (type /help and it displays as floows):
+####################
+ NekoRoid is a bot having a lot of fun
+
+ #    # ###### #    #  ####  
+ ##   # #      #   #  #    # 
+ # #  # #####  ####   #    # 
+ #  # # #      #  #   #    # 
+ #   ## #      #   #  #    # 
+ #    # ###### #    #  ####
+
+####################
+ /cat -- post a random cute cat image
+    /dice -- cast a dice
+    /dart -- cast a dart
+    /bingo -- play a bingo game
+    /nhknews -- get nhk news from rss
+    /investing -- get investing news from rss
+    /googleai -- get google AI news
+    /book {bookid} -- download a book
+ /sensor -- current room status
+ /search_song {song info} -- search a song and generate download link
+####################
