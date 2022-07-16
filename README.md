@@ -38,13 +38,13 @@ Help (type /help and it displays as floows):
 
 ####################
  /cat -- post a random cute cat image
-    /dice -- cast a dice
-    /dart -- cast a dart
-    /bingo -- play a bingo game
-    /nhknews -- get nhk news from rss
-    /investing -- get investing news from rss
-    /googleai -- get google AI news
-    /book {bookid} -- download a book
+ /dice -- cast a dice
+ /dart -- cast a dart
+ /bingo -- play a bingo game
+ /nhknews -- get nhk news from rss
+ /investing -- get investing news from rss
+ /googleai -- get google AI news
+ /book {bookid} -- download a book
  /sensor -- current room status
  /search_song {song info} -- search a song and generate download link
 ####################
