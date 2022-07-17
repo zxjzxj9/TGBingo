@@ -23,7 +23,7 @@ Edit config.json file, add something like the followings, then start the server 
 
 ## API Introduction
 The bot currently support several APIs, including the following.
-Help (type /help and it displays as floows):
+Help (type /help and it displays as follows):
 
 ```
 ####################
@@ -49,3 +49,4 @@ Help (type /help and it displays as floows):
  /search_song {song info} -- search a song and generate download link
 ####################
 ```
+All the possible methods are listed in `main.go`, and we could add any methods to the file as we wish.
