@@ -571,6 +571,8 @@ Help:
 				sendMsg(chatInfo.Message.Chat.ID, text)
 			}
 
+		} else {
+			// go to chatgpt
 		}
 
 	})
